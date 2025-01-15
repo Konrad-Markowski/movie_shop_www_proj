@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../cfg.php');
+require_once('cfg.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $_POST['username'];

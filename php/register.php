@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../cfg.php');
+require_once('cfg.php');
 
 // Obsługa formularza rejestracji
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

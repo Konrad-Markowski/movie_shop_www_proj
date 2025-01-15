@@ -1,5 +1,5 @@
 <?php
-require_once('../cfg.php');
+require_once('cfg.php');
 
 // Pobranie danych produktu
 $product_id = $_GET['id'] ?? 0;

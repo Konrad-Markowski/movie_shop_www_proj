@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../cfg.php');
+require_once('cfg.php');
 
 // Create categories table if it does not exist
 $sql = "CREATE TABLE IF NOT EXISTS categories (
