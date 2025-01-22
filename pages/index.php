@@ -3,7 +3,7 @@
 include_once 'cfg.php';
 include_once 'showpage.php';
 
-$page = $_GET['page'] ?? 'index';
+$page = $_GET['page'] ?? 'home';
 
 list($title, $content) = showPage($page);
 $pageList = showPageList($mysqli);
@@ -49,10 +49,6 @@ $pageList = showPageList($mysqli);
     <a href="index.php?idp=cart" 
        style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
        Koszyk
-    </a>
-    <a href="index.php?idp=showpage" 
-       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
-       Lista podstron
     </a>
 </nav>
 </div>

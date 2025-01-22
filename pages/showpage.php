@@ -1,7 +1,6 @@
 <?php
 // Funkcja wyświetlająca stronę
 include_once 'cfg.php';
-include_once '../php/admin_subpages.php';
 
 function showPage($alias)
 {
