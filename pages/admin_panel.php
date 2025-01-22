@@ -10,7 +10,7 @@ include '../php/admin_products.php';
 ?>
 
 <div class="header">
-    <h1>Panel Administratora</h1>
+    <h1 style="color:white;">Panel Administratora</h1>
     <a href="index.php?idp=logout" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Wyloguj</a>
     <form id="logoutForm" action="logout.php" method="POST" style="display: none;">
         <input type="hidden" name="action" value="logout">

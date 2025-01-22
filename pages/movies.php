@@ -4,11 +4,7 @@ session_start();
 ?>
 <h2>Lista filmów</h2>
 <?php
-$mysqli = new mysqli("localhost", "root", "", "shop");
-
-if ($mysqli->connect_error) {
-    die("Connection failed: " . $mysqli->connect_error);
-}
+include_once 'cfg.php';
 
 $result = $mysqli->query("SELECT * FROM products");
 if ($result->num_rows > 0) {
