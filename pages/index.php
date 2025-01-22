@@ -10,15 +10,36 @@
 
 <div class="header">
     <h1>Sklep Internetowy</h1>
-    <nav>
-        <a href="index.php?idp=home">Home</a>
-        <a href="index.php?idp=movies">Filmy</a>
-        <a href="index.php?idp=categories">Kategorie</a>
-        <a href="index.php?idp=admin_panel">Admin Panel</a>
-        <a href="index.php?idp=login">Logowanie</a>
-        <a href="index.php?idp=register">Rejestracja</a>
-        <a href="index.php?idp=cart">Koszyk</a>
-    </nav>
+    <nav style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 10px; margin-bottom: 20px;">
+    <a href="index.php?idp=home" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Home
+    </a>
+    <a href="index.php?idp=movies" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Filmy
+    </a>
+    <a href="index.php?idp=categories" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Kategorie
+    </a>
+    <a href="index.php?idp=admin_panel" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Admin Panel
+    </a>
+    <a href="index.php?idp=login" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Logowanie
+    </a>
+    <a href="index.php?idp=register" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Rejestracja
+    </a>
+    <a href="index.php?idp=cart" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Koszyk
+    </a>
+</nav>
 </div>
 
 <div class="main-content">
