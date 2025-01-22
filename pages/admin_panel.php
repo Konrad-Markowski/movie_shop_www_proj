@@ -71,42 +71,44 @@ include '../php/admin_products.php';
             <button type="submit">Zapisz</button>
         </form>
         
-        <ul id="productList">
-            <?php
-            $result = $mysqli->query("SELECT * FROM products");
-            while ($row = $result->fetch_assoc()) {
-                echo "<li>";
-                echo "<h3>" . htmlspecialchars($row['title']) . "</h3>";
-                echo "<p>" . htmlspecialchars($row['description']) . "</p>";
-                echo "<p>Cena netto: " . number_format($row['price_net'], 2) . " PLN</p>";
-                echo "<p>VAT: " . $row['vat_tax'] . "%</p>";
-                echo "<p>Cena brutto: " . number_format($row['price_net'] * (1 + $row['vat_tax'] / 100), 2) . " PLN</p>";
-                echo "<p>Ilość dostępna: " . $row['stock_quantity'] . "</p>";
-                
-                // Formularz do edycji produktu
-                echo "<form method='POST' action='index.php?idp=admin_panel' style='display: inline;'>
-                        <input type='hidden' name='id' value='" . $row['id'] . "'>
-                        <input type='hidden' name='action' value='EdytujProdukt'>
-                        <input type='text' name='title' value='" . htmlspecialchars($row['title']) . "' required>
-                        <textarea name='description'>" . htmlspecialchars($row['description']) . "</textarea>
-                        <input type='number' name='price_net' value='" . $row['price_net'] . "' step='0.01' required>
-                        <input type='number' name='vat_tax' value='" . $row['vat_tax'] . "' step='0.01' required>
-                        <input type='number' name='stock_quantity' value='" . $row['stock_quantity'] . "' required>
-                        <button type='submit'>Edytuj</button>
-                      </form>";
-                
-                // Formularz do usuwania produktu
-                echo "<form method='POST' action='index.php?idp=admin_panel' style='display: inline;'>
-                        <input type='hidden' name='id' value='" . $row['id'] . "'>
-                        <input type='hidden' name='action' value='UsunProdukt'>
-                        <button type='submit'>Usuń</button>
-                      </form>";
-                
-                echo "</li>";
-            }
-            ?>
-        </ul>
-        <div id="productMessage"></div>
+        <div id="deleteProductPanel" class="panel">
+            <h2>Usuń produkt</h2>
+            <form method="POST" action="index.php?idp=admin_panel" onsubmit="return showProductDeleteAlert()">
+                <input type="hidden" name="action" value="UsunProdukt">
+                <label for="deleteProductId">ID produktu:</label>
+                <input type="number" id="deleteProductId" name="productId" required>
+                <button type="submit">Usuń</button>
+            </form>
+        </div>
+
+        <div id="editProductPanel" class="panel">
+            <h2>Edytuj produkt</h2>
+            <form method="POST" action="index.php?idp=admin_panel">
+                <input type="hidden" name="action" value="EdytujProdukt">
+                <label for="editProductId">ID produktu:</label>
+                <input type="number" id="editProductId" name="productId" required>
+                <label for="editProductTitle">Tytuł:</label>
+                <input type="text" id="editProductTitle" name="title" required>
+                <label for="editProductDescription">Opis:</label>
+                <textarea id="editProductDescription" name="description"></textarea>
+                <label for="editProductPrice">Cena netto:</label>
+                <input type="number" id="editProductPrice" name="price_net" step="0.01" required>
+                <label for="editProductVat">VAT:</label>
+                <input type="number" id="editProductVat" name="vat_tax" step="0.01" required>
+                <label for="editProductStock">Ilość w magazynie:</label>
+                <input type="number" id="editProductStock" name="stock_quantity" required>
+                <label for="editProductCategory">Kategoria:</label>
+                <select id="editProductCategory" name="productCategory" required>
+                    <?php
+                    $result = $mysqli->query("SELECT id, nazwa FROM kategorie");
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row['id'] . "'>" . $row['nazwa'] . "</option>";
+                    }
+                    ?>
+                </select><br>
+                <button type="submit">Edytuj</button>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -118,6 +120,10 @@ function showCategoryAlert() {
 
 function showProductAlert() {
     alert("Produkt został dodany pomyślnie!");
+    return true;
+}
+function showProductDeleteAlert() {
+    alert("Produkt został usunięty pomyślnie!");
     return true;
 }
 </script>
