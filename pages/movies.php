@@ -16,7 +16,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $gross_price = $row['price_net'] + ($row['price_net'] * $row['vat_tax'] / 100);
         echo "<li>";
-        echo "ID: " . $row['id'] . "<br>";
+        echo "ID produktu: " . $row['id'] . "<br>";
         echo "Tytuł: " . $row['title'] . "<br>";
         echo "Opis: " . $row['description'] . "<br>";
         echo "ID kategorii: " . $row['category_id'] . "<br>";
