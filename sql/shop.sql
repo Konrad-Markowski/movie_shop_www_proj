@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sty 22, 2025 at 01:54 AM
+-- Generation Time: Sty 22, 2025 at 10:27 AM
 -- Wersja serwera: 10.4.32-MariaDB
 -- Wersja PHP: 8.2.12
 
@@ -45,7 +45,8 @@ INSERT INTO `kategorie` (`id`, `nazwa`, `matka`) VALUES
 (5, 'superbohaterowie', NULL),
 (6, 'Marvel', 5),
 (8, 'Horror', NULL),
-(9, 'Paranormalne', 8);
+(9, 'Paranormalne', 8),
+(10, 'Psychologiczne', 8);
 
 -- --------------------------------------------------------
 
@@ -92,11 +93,11 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `title`, `description`, `price_net`, `vat_tax`, `stock_quantity`, `availability_status`, `image_path`, `category_id`) VALUES
-(2, 'La La Land', 'film o nieszczęśliwej miłości', 26.00, 23.00, 15, 0, NULL, 1),
+(2, 'La La Land', 'lubie jazz', 50.00, 23.00, 14, 1, NULL, 8),
 (3, 'Avengers', 'bohaterowie', 80.00, 23.00, 17, 0, NULL, 6),
 (4, 'The Notebook', 'aaaaa', 14.00, 15.00, 3, 0, NULL, 1),
-(5, 'Forrest Gump', 'aadsafasf', 124.00, 23.00, 5, 0, NULL, 3),
-(6, 'Iron-Man', 'czlowiek zelazko', 14.00, 11.00, 5, 1, NULL, 6);
+(7, 'Spider_Man', 'film o początkach spider-man\'a', 46.00, 23.00, 14, 1, NULL, 6),
+(8, 'Spider-Man 2', 'spider-man2', 15.00, 15.00, 6, 1, NULL, 6);
 
 -- --------------------------------------------------------
 
@@ -116,7 +117,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `admin_privilages`) VALUES
-(0, 'admin', '$2y$10$emPlaXKRwhj1BXBsBxic..UN0fBFBwENMvBEwS/jHqngQuGHc3CPG', 1);
+(1, 'admin', '$2y$10$emPlaXKRwhj1BXBsBxic..UN0fBFBwENMvBEwS/jHqngQuGHc3CPG', 1),
+(2, 'user', '$2y$10$Az2PyNaHU49EgojrsYbvHucIMhkPII0huAWSLZ5iH9Mk4OxOtnmuO', 0);
 
 --
 -- Indeksy dla zrzutów tabel
@@ -156,7 +158,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `kategorie`
 --
 ALTER TABLE `kategorie`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `page_list`
@@ -168,7 +170,13 @@ ALTER TABLE `page_list`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
