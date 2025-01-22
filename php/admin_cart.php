@@ -2,14 +2,33 @@
 session_start();
 $mysqli = new mysqli("localhost", "root", "", "shop");
 
-// Funkcje do zarządzania koszykiem
+// Funkcja do sprawdzania stanu magazynowego produktu
+function getStockQuantity($productId) {
+    global $mysqli;
+    $query = $mysqli->prepare("SELECT stock_quantity FROM products WHERE id = ?");
+    $query->bind_param("i", $productId);
+    $query->execute();
+    $result = $query->get_result();
+    $row = $result->fetch_assoc();
+    return $row['stock_quantity'] ?? 0;
+}
+
+// Funkcja do zarządzania koszykiem: Dodawanie produktu
 function addToCart($productId, $name, $netPrice, $vat, $quantity) {
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
 
+    $stockQuantity = getStockQuantity($productId);
+    $currentQuantity = $_SESSION['cart'][$productId]['quantity'] ?? 0;
+    $newQuantity = $currentQuantity + $quantity;
+
+    if ($newQuantity > $stockQuantity) {
+        $newQuantity = $stockQuantity; // Ogranicz ilość do dostępnego stanu magazynowego
+    }
+
     if (isset($_SESSION['cart'][$productId])) {
-        $_SESSION['cart'][$productId]['quantity'] += $quantity;
+        $_SESSION['cart'][$productId]['quantity'] = $newQuantity;
     } else {
         $grossPrice = $netPrice * (1 + $vat / 100);
         $_SESSION['cart'][$productId] = [
@@ -17,36 +36,40 @@ function addToCart($productId, $name, $netPrice, $vat, $quantity) {
             'net_price' => $netPrice,
             'vat' => $vat,
             'gross_price' => $grossPrice,
-            'quantity' => $quantity,
+            'quantity' => $newQuantity,
         ];
     }
 }
 
-// Usuń produkt z koszyka
+// Funkcja do usuwania produktu z koszyka
 function removeFromCart($productId) {
     if (isset($_SESSION['cart'][$productId])) {
         unset($_SESSION['cart'][$productId]);
     }
 }
 
-// Zaktualizuj ilość produktu w koszyku
+// Funkcja do aktualizacji ilości w koszyku
 function updateCart($productId, $quantity) {
     if (isset($_SESSION['cart'][$productId])) {
+        $stockQuantity = getStockQuantity($productId);
+        if ($quantity > $stockQuantity) {
+            $quantity = $stockQuantity; // Ogranicz ilość do dostępnego stanu magazynowego
+        }
         $_SESSION['cart'][$productId]['quantity'] = $quantity;
     }
 }
 
-// Wyczyść koszyk
+// Funkcja do czyszczenia koszyka
 function clearCart() {
     unset($_SESSION['cart']);
 }
 
-// Pobierz szczegóły koszyka
+// Funkcja do pobrania szczegółów koszyka
 function getCartDetails() {
     return $_SESSION['cart'] ?? [];
 }
 
-// Oblicz całkowitą wartość koszyka
+// Funkcja do obliczenia całkowitej wartości koszyka
 function getTotalCartValue() {
     $total = 0;
     if (isset($_SESSION['cart'])) {
@@ -63,7 +86,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     switch ($action) {
         case 'add':
-            addToCart($_POST['productId'], $_POST['name'], $_POST['netPrice'], $_POST['vat'], $_POST['quantity']);
+            addToCart(
+                $_POST['productId'],
+                $_POST['name'],
+                $_POST['netPrice'],
+                $_POST['vat'],
+                $_POST['quantity']
+            );
             break;
         case 'remove':
             removeFromCart($_POST['productId']);
