@@ -4,9 +4,12 @@ if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: index.php?idp=login");
     exit();
 }
+include_once '../php/admin_subpages.php';
+include_once '../php/admin_categories.php';
+include_once '../php/admin_products.php';
 
-include '../php/admin_categories.php';
-include '../php/admin_products.php';
+
+handlePageSubmissions($mysqli);
 ?>
 
 <div class="header">
@@ -151,6 +154,39 @@ include '../php/admin_products.php';
                 <input type="text" id="editProductImage" name="image_path"><br>
                 <button type="submit">Edytuj</button>
             </form>
+        </div>
+        
+        <!-- Panel podstron -->
+        <div id="subpagesPanel" class="panel">
+            <h2>Podstrony</h2>
+            <div>
+                <a href="index.php?idp=admin_panel&action=add" class="button">Dodaj nową podstronę</a>
+                <?php
+                if (isset($_GET['action'])) {
+                    if ($_GET['action'] === 'edit' && isset($_GET['id'])) {
+                        // Funkcja do edycji podstrony
+                        echo EdytujPodstrone($mysqli);
+                    } elseif ($_GET['action'] === 'add') {
+                        echo DodajNowaPodstrone($mysqli);
+                    } elseif ($_GET['action'] === 'delete' && isset($_GET['id'])) {
+                        // Zmieniamy metodę z GET na POST dla usuwania
+                        ?>
+                        <form method="POST" action="index.php?idp=admin_panel">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+                            <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('Czy na pewno chcesz usunąć?')">Usuń
+                            </button>
+                        </form>
+                        <?php
+                    } else {
+                        echo '<div class="alert alert-error">Nieznana akcja!</div>';
+                    }
+                } else {
+                    echo ListaPodstron($mysqli);
+                }
+                ?>
+            </div>
         </div>
     </div>
 </div>

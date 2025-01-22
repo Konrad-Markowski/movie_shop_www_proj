@@ -1,3 +1,14 @@
+<?php
+
+include_once 'cfg.php';
+include_once 'showpage.php';
+
+$page = $_GET['page'] ?? 'index';
+
+list($title, $content) = showPage($page);
+$pageList = showPageList($mysqli);
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>

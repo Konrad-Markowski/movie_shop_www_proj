@@ -1,8 +1,6 @@
 <?php
 
-include_once '../pages/cfg.php'
-
-function handlePageSubmissions($link)
+function handlePageSubmissions($mysqli)
 {
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_page']) && isset($_GET['id'])) {
     $id = filter_var($_GET['id'], FILTER_VALIDATE_INT);
@@ -11,8 +9,8 @@ function handlePageSubmissions($link)
       die("Invalid page ID");
     }
 
-    $title = mysqli_real_escape_string($link, trim($_POST['page_title']));
-    $content = mysqli_real_escape_string($link, trim($_POST['page_content']));
+    $title = mysqli_real_escape_string($mysqli, trim($_POST['page_title']));
+    $content = mysqli_real_escape_string($mysqli, trim($_POST['page_content']));
     $status = isset($_POST['page_active']) ? 1 : 0;
 
     $query = "UPDATE page_list SET 
@@ -21,18 +19,18 @@ function handlePageSubmissions($link)
                  status = $status 
                  WHERE id = $id LIMIT 1";
 
-   mysqli_query($link, $query);
+   mysqli_query($mysqli, $query);
   }
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_page'])) {
-    $title = mysqli_real_escape_string($link, trim($_POST['page_title']));
-    $content = mysqli_real_escape_string($link, trim($_POST['page_content']));
+    $title = mysqli_real_escape_string($mysqli, trim($_POST['page_title']));
+    $content = mysqli_real_escape_string($mysqli, trim($_POST['page_content']));
     $status = isset($_POST['page_active']) ? 1 : 0;
 
     $query = "INSERT INTO page_list (page_title, page_content, status) 
                  VALUES ('$title', '$content', $status)";
 
-    mysqli_query($link, $query);
+    mysqli_query($mysqli, $query);
   }
 
   if (isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
@@ -43,16 +41,18 @@ function handlePageSubmissions($link)
     }
 
     $query = "DELETE FROM page_list WHERE id = $id LIMIT 1";
-    mysqli_query($link, $query);
+    mysqli_query($mysqli, $query);
+
+    header("Location: index.php?idp=admin_panel");
+    exit();
   }
 }
 
 
-function ListaPodstron($link)
+function ListaPodstron($mysqli)
 {
   $result = '<div class="card">';
   $result .= '<h2>Lista Podstron</h2>';
-  $result .= '<a href="?action=add" class="btn btn-success">Dodaj nową stronę</a>';
   $result .= '<table class="table">
                 <tr>
                     <th>ID</th>
@@ -62,7 +62,7 @@ function ListaPodstron($link)
                 </tr>';
 
   $query = "SELECT * FROM page_list ORDER BY id ASC LIMIT 100";
-  $pages = mysqli_query($link, $query);
+  $pages = mysqli_query($mysqli, $query);
 
   while ($row = mysqli_fetch_array($pages)) {
     $result .= '<tr>
@@ -70,8 +70,8 @@ function ListaPodstron($link)
                     <td>' . htmlspecialchars($row['page_title']) . '</td>
                     <td>' . ($row['status'] ? 'Aktywna' : 'Nieaktywna') . '</td>
                     <td>
-                        <a href="?action=edit&id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Edytuj</a>
-                        <a href="?action=delete&id=' . htmlspecialchars($row['id']) . '" 
+                        <a href="?idp=admin_panel&action=edit&id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Edytuj</a>
+                        <a href="?idp=admin_panel&action=delete&id=' . htmlspecialchars($row['id']) . '" 
                            class="btn btn-danger"
                            onclick="return confirm(\'Czy na pewno chcesz usunąć?\')">Usuń</a>
                     </td>
@@ -83,7 +83,7 @@ function ListaPodstron($link)
 }
 
 
-function EdytujPodstrone($link)
+function EdytujPodstrone($mysqli)
 {
   if (!isset($_GET['id'])) {
     return '<div class="alert alert-error">Nie wybrano strony do edycji</div>';
@@ -96,7 +96,7 @@ function EdytujPodstrone($link)
   }
 
   $query = "SELECT * FROM page_list WHERE id = ? LIMIT 1";
-  $stmt = mysqli_prepare($link, $query);
+  $stmt = mysqli_prepare($mysqli, $query);
   mysqli_stmt_bind_param($stmt, "i", $id);
   mysqli_stmt_execute($stmt);
   $result = mysqli_stmt_get_result($stmt);
@@ -131,7 +131,7 @@ function EdytujPodstrone($link)
             
             <div class="form-buttons">
                 <button type="submit" name="save_page" class="btn btn-success">Zapisz zmiany</button>
-                <a href="admin.php" class="btn btn-secondary">Anuluj</a>
+                <a href="index.php?idp=admin_panel" class="btn btn-secondary">Anuluj</a>
             </div>
         </form>
     </div>';
@@ -139,7 +139,7 @@ function EdytujPodstrone($link)
   return $form;
 }
 
-function DodajNowaPodstrone($link)
+function DodajNowaPodstrone($mysqli)
 {
   $form = '
     <div class="card">
@@ -164,7 +164,7 @@ function DodajNowaPodstrone($link)
             
             <div class="form-buttons">
                 <button type="submit" name="add_page" class="btn btn-success">Dodaj stronę</button>
-                <a href="admin.php" class="btn btn-secondary">Anuluj</a>
+                <a href="index.php?idp=admin_panel" class="btn btn-secondary">Anuluj</a>
             </div>
         </form>
     </div>';
