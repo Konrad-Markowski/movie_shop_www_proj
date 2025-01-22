@@ -44,6 +44,16 @@ include '../php/admin_products.php';
         </ul>
     </div>
 
+    <div id="deleteCategoryPanel" class="panel">
+    <h2>Usuń kategorię</h2>
+    <form method="POST" action="index.php?idp=admin_panel" onsubmit="return showCategoryDeleteAlert()">
+        <input type="hidden" name="action" value="UsunKategorie">
+        <label for="deleteCategoryId">ID kategorii:</label>
+        <input type="number" id="deleteCategoryId" name="categoryId" required>
+        <button type="submit">Usuń</button>
+    </form>
+</div>
+
     <div id="productsPanel" class="panel">
         <h2>Filmy</h2>
         <form id="productForm" method="POST" action="index.php?idp=admin_panel" onsubmit="return showProductAlert()">
