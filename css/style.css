@@ -264,26 +264,64 @@ body {
     padding: 5px;
     transition: transform 0.3s ease-in-out;
 }
+.film-gallery {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
 
-/* Bloki kolorów */
-.color-block {
-    width: 100px;
-    height: 100px;
-    margin: 20px;
-    display: inline-block;
-}
-.block1 {
-    background-color: red;
-}
-.block2 {
-    background-color: blue;
-}
-.block3 {
-    background-color: green;
-}
+    .film-item {
+        text-align: center;
+        padding: 10px;
+        border: 2px solid #ddd; /* Border dla komórek */
+        border-radius: 8px; /* Zaokrąglone rogi komórek */
+        background-color: #f9f9f9; /* Jasne tło komórek */
+    }
 
-/* "Easter egg" link */
-#easter-egg {
-    text-decoration: none;
-    color: black;
-}
+    .film-item img {
+        width: 150px; /* Wspólny rozmiar dla zdjęć */
+        height: 200px; /* Wspólny rozmiar dla zdjęć */
+        object-fit: cover; /* Przycinanie zdjęć, aby pasowały do rozmiaru */
+        border-radius: 8px; /* Zaokrąglenie rogów zdjęć */
+        border: 3px solid #ddd; /* Border wokół zdjęcia */
+    }
+
+    .film-item p {
+        margin-top: 10px;
+        font-weight: bold;
+        color: #333; /* Kolor tekstu */
+        font-size: 1rem; /* Wielkość czcionki */
+    }
+
+    /* Styl dla tabeli */
+    table {
+        width: 100%;
+        border: 2px solid #333; /* Obramowanie tabeli */
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    /* Dodanie stylu dla nagłówków */
+    h3 {
+        color: #444;
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Dodatkowe responsywne stylowanie */
+    @media screen and (max-width: 768px) {
+        .film-gallery {
+            width: 100%;
+        }
+
+        .film-item img {
+            width: 120px; /* Mniejszy rozmiar obrazków na mniejszych ekranach */
+            height: 160px;
+        }
+
+        table {
+            border: 1px solid #333; /* Mniejsze obramowanie na mniejszych ekranach */
+        }
+    }
