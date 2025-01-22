@@ -1,8 +1,8 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "shop");
+include_once 'cfg.php';
 
 // Funkcje do zarządzania produktami
-function DodajProdukt($title, $description, $category_id, $price_net, $vat_tax, $stock_quantity) {
+function DodajProdukt($title, $description, $category_id, $price_net, $vat_tax, $stock_quantity, $image_path) {
     global $mysqli;
 
     // Sprawdzenie, czy kategoria istnieje
@@ -21,23 +21,15 @@ function DodajProdukt($title, $description, $category_id, $price_net, $vat_tax, 
     $availability_status = $stock_quantity > 0 ? 1 : 0;
 
     // Dodanie produktu
-    $stmt = $mysqli->prepare("INSERT INTO products (title, description, category_id, price_net, vat_tax, stock_quantity, availability_status) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssdiii", $title, $description, $category_id, $price_net, $vat_tax, $stock_quantity, $availability_status);
+    $stmt = $mysqli->prepare("INSERT INTO products (title, description, category_id, price_net, vat_tax, stock_quantity, availability_status, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssdiiis", $title, $description, $category_id, $price_net, $vat_tax, $stock_quantity, $availability_status, $image_path);
     $stmt->execute();
     $stmt->close();
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
-    if ($_POST['action'] == 'UsunProdukt') {
-        $product_id = $_POST['productId']; // Get the product ID from the form
-        UsunProdukt($product_id); // Call the function to delete the product
-    }
-}
-
 function UsunProdukt($product_id) {
     global $mysqli;
-    
+
     // Zapytanie SQL do usunięcia produktu na podstawie jego id
     $stmt = $mysqli->prepare("DELETE FROM products WHERE id = ?");
     $stmt->bind_param("i", $product_id);
@@ -45,7 +37,7 @@ function UsunProdukt($product_id) {
     $stmt->close();
 }
 
-function EdytujProdukt($id, $title, $description, $category_id, $price_net, $vat_tax, $stock_quantity) {
+function EdytujProdukt($id, $title, $description, $category_id, $price_net, $vat_tax, $stock_quantity, $image_path) {
     global $mysqli;
 
     // Sprawdzenie, czy kategoria istnieje
@@ -77,13 +69,9 @@ function EdytujProdukt($id, $title, $description, $category_id, $price_net, $vat
     $availability_status = $stock_quantity > 0 ? 1 : 0;
 
     // Aktualizacja produktu z uwzględnieniem zmiany kategorii
-    $stmt = $mysqli->prepare("UPDATE products SET title = ?, description = ?, category_id = ?, price_net = ?, vat_tax = ?, stock_quantity = ?, availability_status = ? WHERE id = ?");
-    $stmt->bind_param("sssdiiii", $title, $description, $category_id, $price_net, $vat_tax, $stock_quantity, $availability_status, $id);
-    if ($stmt->execute()) {
-        echo "Produkt został zaktualizowany pomyślnie.";
-    } else {
-        echo "Błąd podczas aktualizacji produktu: " . $stmt->error;
-    }
+    $stmt = $mysqli->prepare("UPDATE products SET title = ?, description = ?, category_id = ?, price_net = ?, vat_tax = ?, stock_quantity = ?, availability_status = ?, image_path = ? WHERE id = ?");
+    $stmt->bind_param("sssdiiisi", $title, $description, $category_id, $price_net, $vat_tax, $stock_quantity, $availability_status, $image_path, $id);
+    $stmt->execute();
     $stmt->close();
 }
 
@@ -108,7 +96,7 @@ function PokazProdukty($category_id = null) {
         echo "<p>VAT: " . $row['vat_tax'] . "%</p>";
         echo "<p>Cena brutto: " . number_format($row['price_net'] * (1 + $row['vat_tax'] / 100), 2) . " PLN</p>";
         echo "<p>Ilość dostępna: " . $row['stock_quantity'] . "</p>";
-        echo "<form method='POST' action='../php/admin_products.php' style='display: inline;'>
+        echo "<form method='POST' action='admin_products.php' style='display: inline;'>
                 <input type='hidden' name='productId' value='" . $row['id'] . "'>
                 <input type='hidden' name='action' value='EdytujProdukt'>
                 <input type='text' name='title' value='" . htmlspecialchars($row['title']) . "' required>
@@ -118,8 +106,8 @@ function PokazProdukty($category_id = null) {
                 <input type='number' name='stock_quantity' value='" . $row['stock_quantity'] . "' required>
                 <button type='submit'>Edytuj</button>
               </form>";
-        echo "<form method='POST' action='../php/admin_products.php' style='display: inline;'>
-                <input type='hidden' name='productName' value='" . htmlspecialchars($row['title']) . "'>
+        echo "<form method='POST' action='admin_products.php' style='display: inline;'>
+                <input type='hidden' name='productId' value='" . $row['id'] . "'>
                 <input type='hidden' name='action' value='UsunProdukt'>
                 <button type='submit'>Usuń</button>
               </form>";
@@ -135,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($action) {
         case 'DodajProdukt':
             if (isset($_POST['productName'], $_POST['productDescription'], $_POST['productCategory'], $_POST['productPrice'], $_POST['productVat'], $_POST['productStock'])) {
-                DodajProdukt($_POST['productName'], $_POST['productDescription'], $_POST['productCategory'], $_POST['productPrice'], $_POST['productVat'], $_POST['productStock']);
+                DodajProdukt($_POST['productName'], $_POST['productDescription'], $_POST['productCategory'], $_POST['productPrice'], $_POST['productVat'], $_POST['productStock'], $_POST['productImage']);
                 header("Location: ../pages/index.php?idp=admin_panel");
                 exit();
             } else {
@@ -143,15 +131,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             break;
         case 'UsunProdukt':
-            if (isset($_POST['productName'])) {
-                UsunProdukt($_POST['productName']);
+            if (isset($_POST['productId'])) {
+                UsunProdukt($_POST['productId']);
                 header("Location: ../pages/index.php?idp=admin_panel");
                 exit();
             }
             break;
         case 'EdytujProdukt':
             if (isset($_POST['productId'], $_POST['title'], $_POST['description'], $_POST['productCategory'], $_POST['price_net'], $_POST['vat_tax'], $_POST['stock_quantity'])) {
-                EdytujProdukt($_POST['productId'], $_POST['title'], $_POST['description'], $_POST['productCategory'], $_POST['price_net'], $_POST['vat_tax'], $_POST['stock_quantity']);
+                EdytujProdukt($_POST['productId'], $_POST['title'], $_POST['description'], $_POST['productCategory'], $_POST['price_net'], $_POST['vat_tax'], $_POST['stock_quantity'], $_POST['image_path']);
                 header("Location: ../pages/index.php?idp=admin_panel");
                 exit();
             }

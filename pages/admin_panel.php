@@ -18,6 +18,7 @@ include '../php/admin_products.php';
 </div>
 
 <div class="main-content">
+    <!-- KATEGORIE -->
     <div id="categoriesPanel" class="panel">
         <h2>Kategorie</h2>
         <form id="categoryForm" method="POST" action="index.php?idp=admin_panel" onsubmit="return showCategoryAlert()">
@@ -39,21 +40,47 @@ include '../php/admin_products.php';
             
             <button type="submit">Zapisz</button>
         </form>
+
         <ul id="categoryList">
             <?php WyswietlKategorie(); ?>
         </ul>
+
+        <!-- Panel usuwania kategorii -->
+        <div id="deleteCategoryPanel" class="panel">
+            <h2>Usuń kategorię</h2>
+            <form method="POST" action="index.php?idp=admin_panel" onsubmit="return showCategoryDeleteAlert()">
+                <input type="hidden" name="action" value="UsunKategorie">
+                <label for="deleteCategoryId">ID kategorii:</label>
+                <input type="number" id="deleteCategoryId" name="categoryId" required>
+                <button type="submit">Usuń</button>
+            </form>
+        </div>
+
+        <!-- Panel edycji kategorii -->
+        <div id="editCategoryPanel" class="panel">
+            <h2>Edytuj kategorię</h2>
+            <form method="POST" action="index.php?idp=admin_panel">
+                <input type="hidden" name="action" value="EdytujKategorie">
+                <label for="editCategoryId">ID kategorii:</label>
+                <input type="number" id="editCategoryId" name="categoryId" required>
+                <label for="editCategoryName">Nazwa kategorii:</label>
+                <input type="text" id="editCategoryName" name="categoryName" required>
+                <label for="editParentCategory">Nadrzędna kategoria:</label>
+                <select id="editParentCategory" name="parentCategory">
+                    <option value="0">Brak (nadrzędna kategoria)</option>
+                    <?php
+                    $result = $mysqli->query("SELECT id, nazwa FROM kategorie WHERE matka IS NULL");
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row['id'] . "'>" . $row['nazwa'] . "</option>";
+                    }
+                    ?>
+                </select>
+                <button type="submit">Edytuj</button>
+            </form>
+        </div>
     </div>
 
-    <div id="deleteCategoryPanel" class="panel">
-    <h2>Usuń kategorię</h2>
-    <form method="POST" action="index.php?idp=admin_panel" onsubmit="return showCategoryDeleteAlert()">
-        <input type="hidden" name="action" value="UsunKategorie">
-        <label for="deleteCategoryId">ID kategorii:</label>
-        <input type="number" id="deleteCategoryId" name="categoryId" required>
-        <button type="submit">Usuń</button>
-    </form>
-</div>
-
+    <!-- PRODUKTY -->
     <div id="productsPanel" class="panel">
         <h2>Filmy</h2>
         <form id="productForm" method="POST" action="index.php?idp=admin_panel" onsubmit="return showProductAlert()">
@@ -78,9 +105,12 @@ include '../php/admin_products.php';
                 }
                 ?>
             </select><br>
+            <label for="productImage">Link do obrazu:</label>
+            <input type="text" id="productImage" name="productImage"><br>
             <button type="submit">Zapisz</button>
         </form>
-        
+
+        <!-- Panel usuwania produktu -->
         <div id="deleteProductPanel" class="panel">
             <h2>Usuń produkt</h2>
             <form method="POST" action="index.php?idp=admin_panel" onsubmit="return showProductDeleteAlert()">
@@ -91,9 +121,10 @@ include '../php/admin_products.php';
             </form>
         </div>
 
+        <!-- Panel edycji produktu -->
         <div id="editProductPanel" class="panel">
             <h2>Edytuj produkt</h2>
-            <form method="POST" action="index.php?idp=admin_panel">
+            <form method="POST" action="index.php?idp=admin_panel" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="EdytujProdukt">
                 <label for="editProductId">ID produktu:</label>
                 <input type="number" id="editProductId" name="productId" required>
@@ -116,6 +147,8 @@ include '../php/admin_products.php';
                     }
                     ?>
                 </select><br>
+                <label for="editProductImage">Link do obrazu:</label>
+                <input type="text" id="editProductImage" name="image_path"><br>
                 <button type="submit">Edytuj</button>
             </form>
         </div>
@@ -132,8 +165,14 @@ function showProductAlert() {
     alert("Produkt został dodany pomyślnie!");
     return true;
 }
+
 function showProductDeleteAlert() {
     alert("Produkt został usunięty pomyślnie!");
+    return true;
+}
+
+function showCategoryDeleteAlert() {
+    alert("Kategoria została usunięta pomyślnie!");
     return true;
 }
 </script>

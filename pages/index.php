@@ -39,10 +39,14 @@
        style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
        Koszyk
     </a>
+    <a href="index.php?idp=showpage" 
+       style="text-decoration: none; color: #fff; font-weight: bold; padding: 12px 20px; background-color: rgba(57, 153, 153, 0.8); border-radius: 5px; transition: all 0.3s ease; font-size: 1rem; letter-spacing: 1px;">
+       Lista podstron
+    </a>
 </nav>
 </div>
 
-<div class="main-content">
+<div class="main-content" style="width: 80%;">
     <?php
     error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
