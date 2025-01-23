@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../php/admin_cart.php'; // Upewnij się, że ścieżka jest poprawna
 
 // Pobranie szczegółów koszyka
@@ -67,7 +66,6 @@ $totalValue = getTotalCartValue() ?? 0.00;
             </tfoot>
         </table>
 
-        <button type="submit" name="action" value="update">Zaktualizuj koszyk</button>
         <button type="submit" name="action" value="clear">Wyczyść koszyk</button>
     </form>
 <?php endif; ?>

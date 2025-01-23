@@ -71,7 +71,7 @@ function WyswietlKategorie($parent_id = null, $poziom = 0) {
 }
 
 // Obsługa żądań POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
     switch ($action) {
         case 'DodajKategorie':
@@ -89,13 +89,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Obsługa żądań GET
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $action = $_GET['action'];
-    switch ($action) {
-        case 'PokazKategorie':
-            WyswietlKategorie();
-            break;
-    }
-}
-?>
+// // Obsługa żądań GET
+// if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+//     $action = $_GET['action'];
+//     switch ($action) {
+//         case 'PokazKategorie':
+//             WyswietlKategorie();
+//             break;
+//     }
+// }
+// ?>

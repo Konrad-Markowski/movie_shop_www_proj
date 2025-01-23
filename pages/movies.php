@@ -65,5 +65,4 @@ if ($result->num_rows > 0) {
     echo "<p>Brak filmów.</p>";
 }
 
-$mysqli->close();
 ?>

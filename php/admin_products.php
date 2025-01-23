@@ -118,7 +118,7 @@ function PokazProdukty($category_id = null) {
 }
 
 // Obsługa żądań POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
     switch ($action) {
         case 'DodajProdukt':
